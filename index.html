@@ -1,1 +1,179 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeNest — Trading Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:14px Arial,sans-serif;color:#252a34;background:#f6f8fb}
+header{height:65px;background:white;border-bottom:1px solid #e5e8ef;display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:2}
+.logo{font-size:23px;font-weight:bold;color:#387ed1}.logo span{color:#222}
+nav{display:flex;gap:22px;color:#626977}
+nav a{cursor:pointer;text-decoration:none;color:inherit}
+nav a:hover{color:#387ed1}
+.container{max-width:1200px;margin:30px auto;padding:0 20px}
+.welcome{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+h1{font-size:26px;margin:0 0 8px}p{color:#778091}
+.tag{background:#fff4d6;color:#956500;padding:8px 12px;border-radius:20px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:25px 0}
+.card{background:white;border:1px solid #e7eaf0;border-radius:12px;padding:22px}
+.label{color:#778091;font-size:13px}
+.big{font-size:28px;font-weight:600;margin:12px 0}
+.green{color:#15966a}.red{color:#d64b55}
+.columns{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.panel{background:white;border:1px solid #e7eaf0;border-radius:12px;padding:20px;margin-bottom:20px;min-width:0}
+.panel h2{font-size:17px;margin:0 0 18px}
+.search{width:100%;padding:12px;border:1px solid #dfe3eb;border-radius:7px;margin-bottom:14px;font-size:14px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:14px 8px;border-bottom:1px solid #edf0f4;white-space:nowrap}
+th{color:#778091;font-size:12px;font-weight:normal}
+.table-wrap{overflow-x:auto}
+.symbol{font-weight:bold}.sub{font-size:12px;color:#8b93a1;margin-top:5px}
+button{border:0;border-radius:6px;padding:9px 13px;cursor:pointer;font-weight:600}
+.buy{background:#e1f5ed;color:#087e59}.sell{background:#ffe8e9;color:#c52d3a}
+.primary{background:#387ed1;color:white;padding:12px 17px}
+.holding{display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid #edf0f4}
+.holding:last-child{border:0}
+.empty{padding:20px 0;color:#778091;text-align:center}
+footer{text-align:center;color:#9299a5;padding:25px;font-size:12px}
+.notice{font-size:12px;background:#f0f5ff;padding:12px;border-radius:7px;color:#46628c;line-height:1.6}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.columns{grid-template-columns:1fr}nav{gap:12px}header{padding:0 16px}.container{margin:22px auto;padding:0 14px}.big{font-size:25px}}
+@media(max-width:440px){nav a:nth-child(2),nav a:nth-child(3){display:none}h1{font-size:23px}.card,.panel{padding:16px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Trade<span>Nest.</span></div>
+  <nav>
+    <a onclick="showSection('dashboard')">Dashboard</a>
+    <a onclick="showSection('markets')">Markets</a>
+    <a onclick="showSection('portfolio')">Portfolio</a>
+    <a onclick="showSection('orders')">Orders</a>
+  </nav>
+</header>
+
+<main class="container" id="dashboard">
+  <div class="welcome">
+    <div>
+      <h1>Welcome to TradeNest</h1>
+      <p>Your market overview, all in one place.</p>
+    </div>
+    <span class="tag">● Demo Mode — Virtual Money</span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">NIFTY 50</div>
+      <div class="big" id="nifty">25,145.35</div>
+      <div class="green">+0.68% <span class="label">sample data</span></div>
+    </div>
+    <div class="card">
+      <div class="label">SENSEX</div>
+      <div class="big">82,445.21</div>
+      <div class="green">+0.42% <span class="label">sample data</span></div>
+    </div>
+    <div class="card">
+      <div class="label">Virtual portfolio value</div>
+      <div class="big" id="portfolioValue">₹1,00,000</div>
+      <div class="label">Starting demo balance</div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <section class="panel" id="markets">
+      <h2>Market Watch</h2>
+      <input class="search" id="search" placeholder="Search stocks (e.g. TCS)" oninput="renderStocks()">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Instrument</th><th>Price</th><th>Change</th><th>Trade</th></tr></thead>
+          <tbody id="stocks"></tbody>
+        </table>
+      </div>
+      <p class="sub">Prices and changes are illustrative, not live market data.</p>
+    </section>
+
+    <section class="panel" id="portfolio">
+      <h2>Your Holdings</h2>
+      <div id="holdings"></div>
+      <div class="holding"><span>Available virtual cash</span><strong id="cash">₹1,00,000</strong></div>
+    </section>
+  </div>
+
+  <section class="panel" id="orders">
+    <h2>Recent Orders</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stock</th><th>Side</th><th>Quantity</th><th>Price</th><th>Status</th></tr></thead>
+        <tbody id="ordersList"><tr><td colspan="5" class="empty">No demo orders yet. Try buying a stock.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <div class="notice">Educational prototype only. This website does not connect to an exchange or broker, and it cannot execute real trades. All displayed market data is fictional sample data.</div>
+</main>
+<footer>TradeNest © 2026 · Independent trading UI prototype · Not affiliated with Zerodha</footer>
+
+<script>
+const initialStocks=[
+ {name:"Reliance Industries",symbol:"RELIANCE",price:1452.50,change:0.82},
+ {name:"Tata Consultancy",symbol:"TCS",price:3248.75,change:1.12},
+ {name:"HDFC Bank",symbol:"HDFCBANK",price:965.20,change:-0.35},
+ {name:"Infosys",symbol:"INFY",price:1510.60,change:0.64},
+ {name:"ICICI Bank",symbol:"ICICIBANK",price:1284.10,change:-0.21},
+ {name:"Tata Motors",symbol:"TATAMOTORS",price:685.30,change:1.48},
+ {name:"ITC",symbol:"ITC",price:412.80,change:0.25}
+];
+const stocks=initialStocks.map(s=>({...s}));
+let cash=100000,holdings={},orders=[];
+const money=n=>"₹"+n.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+function renderStocks(){
+ const q=document.getElementById("search").value.toLowerCase();
+ document.getElementById("stocks").innerHTML=stocks.filter(s=>(s.name+" "+s.symbol).toLowerCase().includes(q)).map(s=>`
+ <tr><td><div class="symbol">${s.symbol}</div><div class="sub">${s.name}</div></td>
+ <td>${money(s.price)}</td><td class="${s.change>=0?"green":"red"}">${s.change>=0?"+":""}${s.change.toFixed(2)}%</td>
+ <td><button class="buy" onclick="trade('${s.symbol}','BUY')">Buy</button>
+ <button class="sell" onclick="trade('${s.symbol}','SELL')">Sell</button></td></tr>`).join("")||'<tr><td colspan="4" class="empty">No matching stocks found.</td></tr>';
+}
+function trade(symbol,side){
+ const s=stocks.find(x=>x.symbol===symbol);
+ const raw=prompt(`${side} ${symbol}\nSample price: ${money(s.price)}\nEnter quantity (whole shares):`,"1");
+ if(raw===null)return;
+ const qty=Number(raw);
+ if(!Number.isSafeInteger(qty)||qty<1||qty>100000){alert("Enter a valid whole-share quantity.");return}
+ const total=qty*s.price;
+ if(side==="BUY"){
+  if(total>cash){alert("Insufficient virtual cash.");return}
+  cash-=total;
+  holdings[symbol]=(holdings[symbol]||0)+qty;
+ }else{
+  if((holdings[symbol]||0)<qty){alert("You do not own enough shares in this demo portfolio.");return}
+  holdings[symbol]-=qty;
+  cash+=total;
+ }
+ orders.unshift({symbol,side,qty,price:s.price});
+ renderAll();
+ alert(`${side} demo order recorded for ${qty} share(s) of ${symbol}. No real trade was placed.`);
+}
+function renderHoldings(){
+ const entries=Object.entries(holdings).filter(([s,q])=>q>0);
+ document.getElementById("holdings").innerHTML=entries.length?entries.map(([symbol,qty])=>{
+ const s=stocks.find(x=>x.symbol===symbol);
+ return `<div class="holding"><div><strong>${symbol}</strong><div class="sub">${qty} shares</div></div><strong>${money(qty*s.price)}</strong></div>`;
+ }).join(""):'<div class="empty">No holdings yet.<br>Buy a demo stock to get started.</div>';
+}
+function renderOrders(){
+ document.getElementById("ordersList").innerHTML=orders.length?orders.slice(0,10).map(o=>`
+ <tr><td>${o.symbol}</td><td class="${o.side==="BUY"?"green":"red"}">${o.side}</td><td>${o.qty}</td><td>${money(o.price)}</td><td>Demo filled</td></tr>`).join(""):'<tr><td colspan="5" class="empty">No demo orders yet. Try buying a stock.</td></tr>';
+}
+function renderAll(){
+ renderStocks();renderHoldings();renderOrders();
+ document.getElementById("cash").textContent=money(cash);
+ const value=cash+Object.entries(holdings).reduce((sum,[sym,qty])=>sum+qty*stocks.find(s=>s.symbol===sym).price,0);
+ document.getElementById("portfolioValue").textContent=money(value);
+}
+function showSection(id){document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
+renderAll();
+</script>
+</body>
+</html>
