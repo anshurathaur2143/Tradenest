@@ -1,4 +1,4 @@
-const { DEMO_INSTRUMENTS, hasKiteCredentials, kiteHeaders, json } = require("./_lib/market");
+const { DEMO_INSTRUMENTS, hasKiteCredentials, kiteHeaders, json } = require("../lib/market");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") return json(res, 405, { error:"Method not allowed" });
