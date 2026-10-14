@@ -1,179 +1,370 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradeNest — Trading Dashboard</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101a2b">
+<title>TradeNest — Trading Terminal</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font:14px Arial,sans-serif;color:#252a34;background:#f6f8fb}
-header{height:65px;background:white;border-bottom:1px solid #e5e8ef;display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:2}
-.logo{font-size:23px;font-weight:bold;color:#387ed1}.logo span{color:#222}
-nav{display:flex;gap:22px;color:#626977}
-nav a{cursor:pointer;text-decoration:none;color:inherit}
-nav a:hover{color:#387ed1}
-.container{max-width:1200px;margin:30px auto;padding:0 20px}
-.welcome{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-h1{font-size:26px;margin:0 0 8px}p{color:#778091}
-.tag{background:#fff4d6;color:#956500;padding:8px 12px;border-radius:20px;font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:25px 0}
-.card{background:white;border:1px solid #e7eaf0;border-radius:12px;padding:22px}
-.label{color:#778091;font-size:13px}
-.big{font-size:28px;font-weight:600;margin:12px 0}
-.green{color:#15966a}.red{color:#d64b55}
-.columns{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
-.panel{background:white;border:1px solid #e7eaf0;border-radius:12px;padding:20px;margin-bottom:20px;min-width:0}
-.panel h2{font-size:17px;margin:0 0 18px}
-.search{width:100%;padding:12px;border:1px solid #dfe3eb;border-radius:7px;margin-bottom:14px;font-size:14px}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:14px 8px;border-bottom:1px solid #edf0f4;white-space:nowrap}
-th{color:#778091;font-size:12px;font-weight:normal}
-.table-wrap{overflow-x:auto}
-.symbol{font-weight:bold}.sub{font-size:12px;color:#8b93a1;margin-top:5px}
-button{border:0;border-radius:6px;padding:9px 13px;cursor:pointer;font-weight:600}
-.buy{background:#e1f5ed;color:#087e59}.sell{background:#ffe8e9;color:#c52d3a}
-.primary{background:#387ed1;color:white;padding:12px 17px}
-.holding{display:flex;justify-content:space-between;gap:10px;padding:15px 0;border-bottom:1px solid #edf0f4}
-.holding:last-child{border:0}
-.empty{padding:20px 0;color:#778091;text-align:center}
-footer{text-align:center;color:#9299a5;padding:25px;font-size:12px}
-.notice{font-size:12px;background:#f0f5ff;padding:12px;border-radius:7px;color:#46628c;line-height:1.6}
-@media(max-width:800px){.grid{grid-template-columns:1fr}.columns{grid-template-columns:1fr}nav{gap:12px}header{padding:0 16px}.container{margin:22px auto;padding:0 14px}.big{font-size:25px}}
-@media(max-width:440px){nav a:nth-child(2),nav a:nth-child(3){display:none}h1{font-size:23px}.card,.panel{padding:16px}}
+:root{--navy:#101a2b;--navy2:#17243a;--blue:#387ed1;--blue2:#eaf2ff;--ink:#202a3b;--muted:#8490a3;--line:#e7ebf1;--bg:#f4f6fa;--card:#fff;--green:#16845b;--greenbg:#e8f7f0;--red:#d34855;--redbg:#fff0f1;--amber:#9a6a09;--amberbg:#fff5db;--shadow:0 8px 30px rgba(22,35,56,.06)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #9dc5ff;outline-offset:2px}
+.app-header{height:66px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:20;border-bottom:1px solid #24334a}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.5px;font-size:21px}.brand-mark{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#69a9ff,#387ed1);font-weight:900;color:white}.brand span em{font-style:normal;color:#8bbcff}.header-right{display:flex;align-items:center;gap:14px}.market-status{display:flex;align-items:center;gap:7px;font-size:12px;color:#bdc8d8}.dot{width:7px;height:7px;background:#f0b94d;border-radius:50%;display:inline-block}.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#2b3d58;color:#fff;font-weight:700;font-size:12px}.demo-chip{border:1px solid #50617b;color:#d6e5ff;border-radius:20px;padding:6px 10px;font-size:11px;letter-spacing:.2px}
+.shell{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:calc(100vh - 66px)}.watchlist{background:#fff;border-right:1px solid var(--line);padding:18px 14px;min-width:0}.watch-head{display:flex;align-items:center;justify-content:space-between;margin:0 4px 14px}.watch-head h2{font-size:15px;margin:0}.tiny-count{color:var(--muted);font-size:11px}.search-wrap{position:relative;margin:0 0 12px}.search-wrap span{position:absolute;left:12px;top:10px;color:#8b96a7}.search-wrap input{width:100%;border:1px solid #e1e6ee;border-radius:8px;padding:10px 10px 10px 34px;background:#fbfcfe;outline:none}.search-wrap input:focus{border-color:#8ab7f3;background:#fff}.watch-tabs{display:flex;gap:5px;border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:4px}.watch-tab{background:transparent;border:0;color:var(--muted);font-size:11px;padding:6px 8px;border-radius:6px}.watch-tab.active{background:var(--blue2);color:var(--blue);font-weight:700}.watch-list{max-height:calc(100vh - 270px);overflow:auto}.watch-row{padding:12px 8px;border-bottom:1px solid #f0f2f6;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;cursor:pointer;border-left:3px solid transparent}.watch-row:hover,.watch-row.selected{background:#f7faff;border-left-color:var(--blue)}.stock-name{font-weight:700;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stock-exchange{font-size:10px;color:var(--muted);margin-top:3px}.stock-price{text-align:right;font-weight:600;font-size:12px}.stock-change{text-align:right;font-size:10px;margin-top:3px}.pos{color:var(--green)}.neg{color:var(--red)}.watch-empty{padding:25px 10px;text-align:center;color:var(--muted);font-size:12px}.watch-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;padding:12px 4px 0}
+.main{min-width:0;padding:24px clamp(14px,2.5vw,34px) 40px}.page-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}.eyebrow{text-transform:uppercase;letter-spacing:1.2px;color:var(--blue);font-size:10px;font-weight:800;margin-bottom:5px}.page-top h1{font-size:25px;letter-spacing:-.7px;margin:0}.page-top p{margin:6px 0 0;color:var(--muted);font-size:12px}.page-actions{display:flex;gap:8px;align-items:center}.btn{border:1px solid #dfe5ee;border-radius:8px;padding:9px 12px;background:#fff;color:#46536a;font-weight:650;font-size:12px}.btn:hover{border-color:#aac9f1}.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn-primary:hover{background:#286bb8}.btn-quiet{background:transparent}.btn-buy{background:var(--greenbg);color:var(--green);border:1px solid #d5f0e3}.btn-sell{background:var(--redbg);color:var(--red);border:1px solid #ffdadd}.btn-sm{padding:6px 9px;font-size:11px}
+.indices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.index-card,.panel,.stat-card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}.index-card{padding:16px 18px;min-width:0}.index-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px}.index-icon{width:26px;height:26px;border-radius:8px;background:#f0f5ff;color:var(--blue);display:grid;place-items:center;font-weight:800}.index-value{font-size:22px;font-weight:750;letter-spacing:-.5px;margin:9px 0 3px}.index-foot{display:flex;gap:8px;align-items:center;font-size:11px}.pill{border-radius:5px;padding:3px 6px;font-size:10px;font-weight:700}.pill-green{color:var(--green);background:var(--greenbg)}.pill-red{color:var(--red);background:var(--redbg)}.pill-amber{color:var(--amber);background:var(--amberbg)}
+.view{display:none}.view.active{display:block}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);gap:16px}.panel{padding:18px;margin-bottom:16px;min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.panel-title{font-size:14px;font-weight:800;margin:0}.panel-sub{font-size:11px;color:var(--muted);margin-top:3px}.chart-tools{display:flex;gap:4px}.chart-tools button{background:transparent;border:0;color:var(--muted);border-radius:5px;padding:5px 7px;font-size:10px}.chart-tools button.active{background:var(--blue2);color:var(--blue);font-weight:800}.chart-wrap{height:190px;position:relative;overflow:hidden}.chart-wrap svg{width:100%;height:100%;display:block}.chart-labels{display:flex;justify-content:space-between;color:#9aa4b4;font-size:10px;padding-top:7px}.chart-caption{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:10px;margin-top:12px}.legend-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);display:inline-block}
+.account-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat-card{padding:15px;box-shadow:none}.stat-label{font-size:10px;color:var(--muted)}.stat-number{font-size:20px;font-weight:800;letter-spacing:-.4px;margin:8px 0 4px}.stat-note{font-size:10px;color:var(--muted)}.stat-card.full{grid-column:1/-1}.progress{height:5px;background:#edf0f5;border-radius:5px;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;width:0;background:var(--blue);border-radius:5px}
+.table-panel{padding:0;overflow:hidden}.table-panel .panel-head{padding:18px 18px 0}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:left;font-size:10px;font-weight:700;color:#8a95a5;background:#fafbfd;padding:11px 14px;border-top:1px solid #f0f2f6;border-bottom:1px solid #edf0f4}td{padding:12px 14px;border-bottom:1px solid #f0f2f6;font-size:12px}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fafcff}.td-strong{font-weight:750}.td-muted{font-size:10px;color:var(--muted);margin-top:2px}.empty-cell{text-align:center;color:var(--muted);padding:30px 12px}.table-link{color:var(--blue);background:none;border:0;padding:0;font-weight:700;font-size:11px}
+.movers{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mover{padding:12px;border:1px solid #edf0f5;border-radius:9px}.mover-top{display:flex;justify-content:space-between;gap:8px}.mover-symbol{font-weight:800;font-size:11px}.mover-price{font-size:12px;font-weight:750;margin-top:8px}.mover-change{font-size:10px;margin-top:3px}
+.view-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:4px 0 18px}.view-head h2{font-size:19px;margin:0}.view-head p{font-size:12px;color:var(--muted);margin:5px 0 0}.filter-select{border:1px solid #dfe5ee;background:#fff;padding:9px 10px;border-radius:8px;color:#4c5870}
+.options-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}.options-table th{text-align:center}.options-table td{text-align:center}.options-table .strike-cell{font-weight:800;background:#fafbfd}.call-cell{color:var(--green)}.put-cell{color:var(--red)}.options-side{display:flex;justify-content:center;gap:5px}
+.notice{padding:12px 14px;background:#fff7e5;color:#85600d;border:1px solid #f5e6bd;border-radius:9px;font-size:11px;line-height:1.55;margin-bottom:16px}.notice strong{color:#704e00}.section-note{font-size:11px;color:var(--muted);line-height:1.6;margin:12px 0 0}
+.overlay{position:fixed;inset:0;background:rgba(9,18,33,.58);display:none;align-items:center;justify-content:center;padding:16px;z-index:60}.overlay.open{display:flex}.modal{background:#fff;border-radius:15px;width:min(100%,460px);box-shadow:0 20px 70px #09122150;overflow:hidden}.modal-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start}.modal-head h2{font-size:17px;margin:0}.modal-head p{margin:5px 0 0;color:var(--muted);font-size:11px}.close{border:0;background:#f0f3f7;border-radius:7px;width:30px;height:30px;font-size:18px;color:#566276}.modal-body{padding:20px 22px}.side-switch{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f0f3f7;padding:5px;border-radius:9px;margin-bottom:18px}.side-switch button{border:0;background:transparent;border-radius:6px;padding:10px;font-weight:800;color:#69758a}.side-switch button.active.buy-active{background:var(--green);color:#fff}.side-switch button.active.sell-active{background:var(--red);color:#fff}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}.field label{font-size:11px;color:#6d788a;font-weight:700}.field input,.field select{width:100%;padding:10px;border:1px solid #dfe5ee;border-radius:7px;background:white;color:var(--ink)}.field-help{font-size:10px;color:var(--muted)}.order-summary{display:flex;justify-content:space-between;padding:12px;background:#f7f9fc;border-radius:8px;margin:4px 0 16px;font-size:11px}.order-summary strong{font-size:13px}.modal-actions{display:flex;gap:8px}.modal-actions button{flex:1;padding:12px}.modal-foot{font-size:10px;color:var(--muted);line-height:1.55;margin-top:12px}.toast{position:fixed;bottom:20px;right:20px;z-index:80;max-width:min(380px,calc(100vw - 40px));padding:13px 16px;border-radius:10px;background:#16243a;color:white;box-shadow:var(--shadow);display:none;font-size:12px}.toast.show{display:block}.toast.error{background:#9f2631}
+.mobile-nav{display:none}.footer{text-align:center;font-size:10px;color:#9aa3b1;padding:14px 0 0}
+@media(max-width:1100px){.shell{grid-template-columns:270px minmax(0,1fr)}.dashboard-grid{grid-template-columns:1fr}.watch-list{max-height:calc(100vh - 260px)}}
+@media(max-width:760px){.app-header{height:58px;padding:0 14px}.brand{font-size:18px}.header-right{gap:7px}.market-status{display:none}.demo-chip{font-size:10px;padding:5px 8px}.shell{display:block}.watchlist{display:none}.main{padding:18px 13px 85px}.page-top h1{font-size:22px}.indices{grid-template-columns:1fr 1fr;gap:9px}.index-card{padding:13px}.index-card:last-child{grid-column:1/-1}.index-value{font-size:19px}.panel{padding:14px}.panel-head{margin-bottom:12px}.dashboard-grid{display:block}.chart-wrap{height:160px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--line);justify-content:space-around;padding:8px 3px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -6px 25px #15223a0a}.mobile-nav button{background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;color:#8a95a5;font-size:9px;padding:3px}.mobile-nav button span{font-size:17px}.mobile-nav button.active{color:var(--blue);font-weight:800}.account-stats{gap:8px}.stat-card{padding:12px}.stat-number{font-size:17px}.movers{gap:7px}.mover{padding:10px}.field-grid{gap:9px}.modal-body{padding:17px}.modal-head{padding:17px}.footer{padding-bottom:8px}}
+@media(max-width:390px){.demo-chip{display:none}.indices{grid-template-columns:1fr 1fr}.page-actions .btn{padding:8px}.page-top h1{font-size:20px}.stat-number{font-size:15px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">Trade<span>Nest.</span></div>
-  <nav>
-    <a onclick="showSection('dashboard')">Dashboard</a>
-    <a onclick="showSection('markets')">Markets</a>
-    <a onclick="showSection('portfolio')">Portfolio</a>
-    <a onclick="showSection('orders')">Orders</a>
-  </nav>
+<header class="app-header">
+  <div class="brand"><div class="brand-mark">T</div><span>Trade<em>Nest</em></span></div>
+  <div class="header-right"><div class="market-status"><span class="dot"></span><span id="connectionText">Demo market data</span></div><span class="demo-chip" id="modeChip">PAPER TRADING</span><div class="avatar">TN</div></div>
 </header>
+<div class="shell">
+  <aside class="watchlist">
+    <div class="watch-head"><h2>Market watch</h2><span class="tiny-count" id="watchCount">Loading…</span></div>
+    <div class="search-wrap"><span>⌕</span><input id="stockSearch" autocomplete="off" placeholder="Search stocks or symbols"></div>
+    <div class="watch-tabs">
+      <button class="watch-tab active" data-segment="equity">Equities</button>
+      <button class="watch-tab" data-segment="indices">Indices</button>
+      <button class="watch-tab" data-segment="options">Options</button>
+    </div>
+    <div class="watch-list" id="watchList"><div class="watch-empty">Loading instruments…</div></div>
+    <div class="watch-foot"><span id="watchMode">Sample universe</span><span>⌘ Search</span></div>
+  </aside>
 
-<main class="container" id="dashboard">
-  <div class="welcome">
-    <div>
-      <h1>Welcome to TradeNest</h1>
-      <p>Your market overview, all in one place.</p>
+  <main class="main">
+    <div class="page-top">
+      <div><div class="eyebrow">Trading terminal / Overview</div><h1 id="pageTitle">Good trading starts with a plan.</h1><p id="pageSubtitle">Your market overview, portfolio and orders in one workspace.</p></div>
+      <div class="page-actions"><button class="btn" id="refreshBtn">↻ Refresh</button><button class="btn btn-primary" id="quickBuy">＋ New order</button></div>
     </div>
-    <span class="tag">● Demo Mode — Virtual Money</span>
-  </div>
 
-  <div class="grid">
-    <div class="card">
-      <div class="label">NIFTY 50</div>
-      <div class="big" id="nifty">25,145.35</div>
-      <div class="green">+0.68% <span class="label">sample data</span></div>
+    <div class="indices">
+      <div class="index-card"><div class="index-top"><span>NIFTY 50</span><span class="index-icon">N</span></div><div class="index-value" id="niftyValue">25,145.35</div><div class="index-foot"><span class="pill pill-green" id="niftyChange">+0.68%</span><span style="color:var(--muted)">Sample reference</span></div></div>
+      <div class="index-card"><div class="index-top"><span>SENSEX</span><span class="index-icon">S</span></div><div class="index-value" id="sensexValue">82,445.21</div><div class="index-foot"><span class="pill pill-green" id="sensexChange">+0.42%</span><span style="color:var(--muted)">Sample reference</span></div></div>
+      <div class="index-card"><div class="index-top"><span>Market data</span><span class="index-icon">↗</span></div><div class="index-value" style="font-size:19px" id="marketMode">Demo mode</div><div class="index-foot"><span class="pill pill-amber" id="marketModePill">SIMULATED</span><span style="color:var(--muted)" id="marketAsOf">Not a live feed</span></div></div>
     </div>
-    <div class="card">
-      <div class="label">SENSEX</div>
-      <div class="big">82,445.21</div>
-      <div class="green">+0.42% <span class="label">sample data</span></div>
-    </div>
-    <div class="card">
-      <div class="label">Virtual portfolio value</div>
-      <div class="big" id="portfolioValue">₹1,00,000</div>
-      <div class="label">Starting demo balance</div>
-    </div>
-  </div>
 
-  <div class="columns">
-    <section class="panel" id="markets">
-      <h2>Market Watch</h2>
-      <input class="search" id="search" placeholder="Search stocks (e.g. TCS)" oninput="renderStocks()">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Instrument</th><th>Price</th><th>Change</th><th>Trade</th></tr></thead>
-          <tbody id="stocks"></tbody>
-        </table>
+    <section class="view active" id="view-dashboard">
+      <div class="dashboard-grid">
+        <div>
+          <section class="panel">
+            <div class="panel-head"><div><h2 class="panel-title">Market overview</h2><div class="panel-sub" id="chartSubtitle">NIFTY 50 · illustrative trend</div></div><div class="chart-tools"><button class="active" data-range="1D">1D</button><button data-range="1W">1W</button><button data-range="1M">1M</button><button data-range="1Y">1Y</button></div></div>
+            <div class="chart-wrap"><svg viewBox="0 0 700 190" preserveAspectRatio="none" role="img" aria-label="Illustrative market trend chart"><defs><linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#387ed1" stop-opacity=".22"/><stop offset="100%" stop-color="#387ed1" stop-opacity="0"/></linearGradient></defs><g stroke="#edf0f5" stroke-width="1"><path d="M0 30H700M0 70H700M0 110H700M0 150H700"/></g><path id="chartArea" d="M0 145 L45 130 L85 139 L125 100 L165 112 L205 85 L245 103 L285 62 L325 76 L365 50 L405 68 L445 37 L485 54 L525 30 L565 47 L605 25 L650 36 L700 18 L700 190 L0 190Z" fill="url(#areaFill)"/><path id="chartLine" d="M0 145 L45 130 L85 139 L125 100 L165 112 L205 85 L245 103 L285 62 L325 76 L365 50 L405 68 L445 37 L485 54 L525 30 L565 47 L605 25 L650 36 L700 18" fill="none" stroke="#387ed1" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/><circle cx="700" cy="18" r="4" fill="#387ed1"/></svg></div>
+            <div class="chart-labels"><span>09:15</span><span>11:00</span><span>13:00</span><span>15:30</span></div>
+            <div class="chart-caption"><span class="legend-dot"></span><span>Illustrative chart — connect a licensed data provider for real market candles.</span></div>
+          </section>
+          <section class="panel table-panel">
+            <div class="panel-head"><div><h2 class="panel-title">Your positions</h2><div class="panel-sub">Open paper-trading positions</div></div><button class="table-link" data-view="positions">View all →</button></div>
+            <div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Qty</th><th>Avg. price</th><th>LTP</th><th>P&amp;L</th></tr></thead><tbody id="dashPositions"><tr><td class="empty-cell" colspan="5">No open positions yet. Place a demo order to get started.</td></tr></tbody></table></div>
+          </section>
+        </div>
+        <div>
+          <div class="account-stats">
+            <div class="stat-card"><div class="stat-label">Portfolio value</div><div class="stat-number" id="portfolioValue">₹1,00,000</div><div class="stat-note">Cash + holdings</div></div>
+            <div class="stat-card"><div class="stat-label">Available cash</div><div class="stat-number" id="cashValue">₹1,00,000</div><div class="stat-note">Virtual balance</div></div>
+            <div class="stat-card"><div class="stat-label">Invested value</div><div class="stat-number" id="investedValue">₹0.00</div><div class="stat-note">Current holding value</div></div>
+            <div class="stat-card"><div class="stat-label">Total P&amp;L</div><div class="stat-number" id="pnlValue">₹0.00</div><div class="stat-note" id="pnlNote">Paper portfolio</div></div>
+            <div class="stat-card full"><div style="display:flex;justify-content:space-between;gap:10px"><div><div class="stat-label">Virtual capital used</div><div class="stat-number" id="capitalUsed">0%</div></div><div style="text-align:right"><div class="stat-label">Starting balance</div><div style="font-size:13px;font-weight:800;margin-top:8px">₹1,00,000</div></div></div><div class="progress"><span id="capitalProgress"></span></div></div>
+          </div>
+          <section class="panel" style="margin-top:16px"><div class="panel-head"><div><h2 class="panel-title">Market movers</h2><div class="panel-sub">From the loaded watch universe</div></div></div><div class="movers" id="movers"><div class="watch-empty">Loading market movers…</div></div></section>
+          <section class="panel"><div class="panel-head"><div><h2 class="panel-title">Recent orders</h2><div class="panel-sub">Your latest simulated activity</div></div><button class="table-link" data-view="orders">All orders →</button></div><div id="recentOrders"><div class="watch-empty">No orders placed yet.</div></div></section>
+        </div>
       </div>
-      <p class="sub">Prices and changes are illustrative, not live market data.</p>
     </section>
 
-    <section class="panel" id="portfolio">
-      <h2>Your Holdings</h2>
-      <div id="holdings"></div>
-      <div class="holding"><span>Available virtual cash</span><strong id="cash">₹1,00,000</strong></div>
+    <section class="view" id="view-holdings">
+      <div class="view-head"><div><h2>Holdings</h2><p>Long-term demo holdings and current market value.</p></div><button class="btn" id="resetDemo">Reset demo account</button></div>
+      <section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Quantity</th><th>Avg. cost</th><th>Market price</th><th>Market value</th><th>P&amp;L</th><th>Action</th></tr></thead><tbody id="holdingsTable"></tbody></table></div></section>
     </section>
+
+    <section class="view" id="view-positions">
+      <div class="view-head"><div><h2>Positions</h2><p>Intraday and open paper-trading positions.</p></div></div>
+      <section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Product</th><th>Qty</th><th>Avg. price</th><th>LTP</th><th>P&amp;L</th><th>Action</th></tr></thead><tbody id="positionsTable"></tbody></table></div></section>
+    </section>
+
+    <section class="view" id="view-orders">
+      <div class="view-head"><div><h2>Orders</h2><p>Order history for this browser's demo account.</p></div><button class="btn btn-primary" id="newOrderFromOrders">＋ New order</button></div>
+      <section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Instrument</th><th>Side</th><th>Qty</th><th>Type</th><th>Price</th><th>Status</th><th>Time</th></tr></thead><tbody id="ordersTable"></tbody></table></div></section>
+    </section>
+
+    <section class="view" id="view-options">
+      <div class="view-head"><div><h2>Options chain</h2><p>Discover listed option instruments or explore a clearly simulated chain.</p></div></div>
+      <div class="notice"><strong>Options involve substantial risk.</strong> This screen is for education and paper trading only. Sample option premiums are simulated, not exchange quotes. Lot sizes and expiry dates must be confirmed with an authorized broker before any real order.</div>
+      <div class="options-controls"><label for="optionRoot" style="font-size:11px;font-weight:700;color:var(--muted)">UNDERLYING</label><select id="optionRoot" class="filter-select"><option value="NIFTY">NIFTY</option><option value="BANKNIFTY">BANKNIFTY</option><option value="FINNIFTY">FINNIFTY</option></select><label for="optionExpiry" style="font-size:11px;font-weight:700;color:var(--muted)">EXPIRY</label><select id="optionExpiry" class="filter-select"><option value="">Nearest available</option></select><button class="btn" id="loadOptions">↻ Load chain</button><span class="pill pill-amber" id="optionsMode">SIMULATED</span></div>
+      <section class="panel table-panel"><div class="table-wrap"><table class="options-table"><thead><tr><th colspan="4" style="color:var(--green)">CALL OPTIONS</th><th rowspan="2">STRIKE</th><th colspan="4" style="color:var(--red)">PUT OPTIONS</th></tr><tr><th>Buy</th><th>Sell</th><th>Premium</th><th>Symbol</th><th>Symbol</th><th>Premium</th><th>Buy</th><th>Sell</th></tr></thead><tbody id="optionsTable"><tr><td class="empty-cell" colspan="7">Loading option instruments…</td></tr></tbody></table></div></section>
+      <p class="section-note" id="optionsNote">If provider credentials are not configured, this page uses generated sample strikes and premiums. No option order is sent to a broker.</p>
+    </section>
+    <div class="footer">TradeNest · Independent educational prototype · Not affiliated with Zerodha · No real orders are placed</div>
+  </main>
+</div>
+
+<nav class="mobile-nav" aria-label="Main navigation">
+  <button class="active" data-view="dashboard"><span>⌂</span>Home</button>
+  <button data-view="holdings"><span>▤</span>Holdings</button>
+  <button data-view="positions"><span>↗</span>Positions</button>
+  <button data-view="orders"><span>☷</span>Orders</button>
+  <button data-view="options"><span>⌁</span>Options</button>
+</nav>
+
+<div class="overlay" id="orderOverlay" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+  <div class="modal">
+    <div class="modal-head"><div><h2 id="orderTitle">Place demo order</h2><p id="orderSubtitle">Simulated order · No real trade will be placed</p></div><button class="close" id="closeOrder" aria-label="Close">×</button></div>
+    <form id="orderForm" class="modal-body">
+      <div class="side-switch"><button type="button" id="sideBuy" class="active buy-active">BUY</button><button type="button" id="sideSell">SELL</button></div>
+      <div class="field-grid">
+        <div class="field"><label for="orderSymbol">SYMBOL</label><input id="orderSymbol" required maxlength="40" autocomplete="off"></div>
+        <div class="field"><label for="orderExchange">EXCHANGE</label><select id="orderExchange"><option>NSE</option><option>BSE</option><option>NFO</option><option>MCX</option></select></div>
+        <div class="field"><label for="orderQty">QUANTITY</label><input id="orderQty" type="number" min="1" step="1" value="1" required></div>
+        <div class="field"><label for="orderProduct">PRODUCT</label><select id="orderProduct"><option value="CNC">CNC · Delivery</option><option value="MIS">MIS · Intraday</option><option value="NRML">NRML · Carry forward</option></select></div>
+        <div class="field"><label for="orderType">ORDER TYPE</label><select id="orderType"><option value="MARKET">Market</option><option value="LIMIT">Limit</option><option value="SL">Stop-loss limit</option><option value="SL-M">Stop-loss market</option></select></div>
+        <div class="field" id="priceField"><label for="orderPrice">PRICE (₹)</label><input id="orderPrice" type="number" min="0.05" step="0.05" placeholder="For limit / stop orders" disabled><div class="field-help">Only required for non-market orders.</div></div>
+      </div>
+      <div class="order-summary"><span><span id="summarySide">BUY</span> · Estimated order value</span><strong id="estimatedValue">₹0.00</strong></div>
+      <div class="modal-actions"><button type="button" class="btn" id="cancelOrder">Cancel</button><button type="submit" class="btn btn-primary" id="submitOrder">Place demo buy</button></div>
+      <div class="modal-foot">Paper-trading only. Order results are stored in this browser. The backend validates the simulated order, but does not send anything to a broker or exchange.</div>
+    </form>
   </div>
-
-  <section class="panel" id="orders">
-    <h2>Recent Orders</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Stock</th><th>Side</th><th>Quantity</th><th>Price</th><th>Status</th></tr></thead>
-        <tbody id="ordersList"><tr><td colspan="5" class="empty">No demo orders yet. Try buying a stock.</td></tr></tbody>
-      </table>
-    </div>
-  </section>
-  <div class="notice">Educational prototype only. This website does not connect to an exchange or broker, and it cannot execute real trades. All displayed market data is fictional sample data.</div>
-</main>
-<footer>TradeNest © 2026 · Independent trading UI prototype · Not affiliated with Zerodha</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const initialStocks=[
- {name:"Reliance Industries",symbol:"RELIANCE",price:1452.50,change:0.82},
- {name:"Tata Consultancy",symbol:"TCS",price:3248.75,change:1.12},
- {name:"HDFC Bank",symbol:"HDFCBANK",price:965.20,change:-0.35},
- {name:"Infosys",symbol:"INFY",price:1510.60,change:0.64},
- {name:"ICICI Bank",symbol:"ICICIBANK",price:1284.10,change:-0.21},
- {name:"Tata Motors",symbol:"TATAMOTORS",price:685.30,change:1.48},
- {name:"ITC",symbol:"ITC",price:412.80,change:0.25}
+(function(){
+"use strict";
+const STARTING_CASH=100000, STORAGE_KEY="tradenest-demo-v2";
+const fallback=[
+ {exchange:"NSE",tradingsymbol:"RELIANCE",name:"Reliance Industries",last_price:1452.5,demo:true},
+ {exchange:"NSE",tradingsymbol:"TCS",name:"Tata Consultancy Services",last_price:3248.75,demo:true},
+ {exchange:"NSE",tradingsymbol:"HDFCBANK",name:"HDFC Bank",last_price:965.2,demo:true},
+ {exchange:"NSE",tradingsymbol:"INFY",name:"Infosys",last_price:1510.6,demo:true},
+ {exchange:"NSE",tradingsymbol:"ICICIBANK",name:"ICICI Bank",last_price:1284.1,demo:true},
+ {exchange:"NSE",tradingsymbol:"SBIN",name:"State Bank of India",last_price:812.35,demo:true},
+ {exchange:"NSE",tradingsymbol:"ITC",name:"ITC",last_price:412.8,demo:true},
+ {exchange:"NSE",tradingsymbol:"BHARTIARTL",name:"Bharti Airtel",last_price:1842.15,demo:true},
+ {exchange:"NSE",tradingsymbol:"LT",name:"Larsen & Toubro",last_price:3580,demo:true},
+ {exchange:"NSE",tradingsymbol:"AXISBANK",name:"Axis Bank",last_price:1198.4,demo:true},
+ {exchange:"NSE",tradingsymbol:"KOTAKBANK",name:"Kotak Mahindra Bank",last_price:1930,demo:true},
+ {exchange:"NSE",tradingsymbol:"TATAMOTORS",name:"Tata Motors",last_price:685.3,demo:true},
+ {exchange:"NSE",tradingsymbol:"MARUTI",name:"Maruti Suzuki",last_price:12640,demo:true},
+ {exchange:"NSE",tradingsymbol:"SUNPHARMA",name:"Sun Pharmaceutical",last_price:1745,demo:true},
+ {exchange:"NSE",tradingsymbol:"TITAN",name:"Titan Company",last_price:3520,demo:true},
+ {exchange:"NSE",tradingsymbol:"BAJFINANCE",name:"Bajaj Finance",last_price:928,demo:true},
+ {exchange:"NSE",tradingsymbol:"HINDUNILVR",name:"Hindustan Unilever",last_price:2490,demo:true},
+ {exchange:"NSE",tradingsymbol:"WIPRO",name:"Wipro",last_price:248,demo:true},
+ {exchange:"NSE",tradingsymbol:"HCLTECH",name:"HCL Technologies",last_price:1640,demo:true},
+ {exchange:"NSE",tradingsymbol:"ADANIENT",name:"Adani Enterprises",last_price:2475,demo:true},
+ {exchange:"NSE",tradingsymbol:"NTPC",name:"NTPC",last_price:365,demo:true},
+ {exchange:"NSE",tradingsymbol:"POWERGRID",name:"Power Grid Corporation",last_price:326,demo:true},
+ {exchange:"NSE",tradingsymbol:"ONGC",name:"Oil & Natural Gas Corporation",last_price:286,demo:true},
+ {exchange:"NSE",tradingsymbol:"COALINDIA",name:"Coal India",last_price:421,demo:true},
+ {exchange:"NSE",tradingsymbol:"TATASTEEL",name:"Tata Steel",last_price:162,demo:true},
+ {exchange:"NSE",tradingsymbol:"JSWSTEEL",name:"JSW Steel",last_price:1040,demo:true},
+ {exchange:"NSE",tradingsymbol:"ULTRACEMCO",name:"UltraTech Cement",last_price:11800,demo:true},
+ {exchange:"NSE",tradingsymbol:"ASIANPAINT",name:"Asian Paints",last_price:2920,demo:true},
+ {exchange:"NSE",tradingsymbol:"NESTLEIND",name:"Nestle India",last_price:2460,demo:true},
+ {exchange:"NSE",tradingsymbol:"TECHM",name:"Tech Mahindra",last_price:1590,demo:true},
+ {exchange:"NSE",tradingsymbol:"INDUSINDBK",name:"IndusInd Bank",last_price:745,demo:true},
+ {exchange:"NSE",tradingsymbol:"DRREDDY",name:"Dr. Reddy's Laboratories",last_price:1280,demo:true},
+ {exchange:"NSE",tradingsymbol:"CIPLA",name:"Cipla",last_price:1580,demo:true},
+ {exchange:"NSE",tradingsymbol:"DIVISLAB",name:"Divi's Laboratories",last_price:6350,demo:true},
+ {exchange:"NSE",tradingsymbol:"EICHERMOT",name:"Eicher Motors",last_price:6200,demo:true},
+ {exchange:"NSE",tradingsymbol:"HEROMOTOCO",name:"Hero MotoCorp",last_price:5750,demo:true},
+ {exchange:"NSE",tradingsymbol:"APOLLOHOSP",name:"Apollo Hospitals",last_price:7200,demo:true},
+ {exchange:"NSE",tradingsymbol:"GRASIM",name:"Grasim Industries",last_price:2780,demo:true},
+ {exchange:"NSE",tradingsymbol:"BRITANNIA",name:"Britannia Industries",last_price:5850,demo:true},
+ {exchange:"NSE",tradingsymbol:"DABUR",name:"Dabur India",last_price:545,demo:true},
+ {exchange:"NSE",tradingsymbol:"PIDILITIND",name:"Pidilite Industries",last_price:3020,demo:true},
+ {exchange:"NSE",tradingsymbol:"BEL",name:"Bharat Electronics",last_price:410,demo:true},
+ {exchange:"NSE",tradingsymbol:"TRENT",name:"Trent",last_price:6200,demo:true},
+ {exchange:"NSE",tradingsymbol:"ZOMATO",name:"Eternal (formerly Zomato)",last_price:315,demo:true},
+ {exchange:"NSE",tradingsymbol:"PAYTM",name:"One 97 Communications",last_price:1280,demo:true},
+ {exchange:"NSE",tradingsymbol:"IRCTC",name:"IRCTC",last_price:740,demo:true},
+ {exchange:"NSE",tradingsymbol:"DMART",name:"Avenue Supermarts",last_price:4350,demo:true},
+ {exchange:"NSE",tradingsymbol:"INDIGO",name:"InterGlobe Aviation",last_price:5650,demo:true},
+ {exchange:"NSE",tradingsymbol:"VEDL",name:"Vedanta",last_price:460,demo:true},
+ {exchange:"NSE",tradingsymbol:"HINDALCO",name:"Hindalco Industries",last_price:680,demo:true},
+ {exchange:"NSE",tradingsymbol:"NIFTY 50",name:"Nifty 50 Index",last_price:25145.35,instrument_type:"INDEX",demo:true},
+ {exchange:"BSE",tradingsymbol:"SENSEX",name:"BSE Sensex Index",last_price:82445.21,instrument_type:"INDEX",demo:true}
 ];
-const stocks=initialStocks.map(s=>({...s}));
-let cash=100000,holdings={},orders=[];
-const money=n=>"₹"+n.toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
-function renderStocks(){
- const q=document.getElementById("search").value.toLowerCase();
- document.getElementById("stocks").innerHTML=stocks.filter(s=>(s.name+" "+s.symbol).toLowerCase().includes(q)).map(s=>`
- <tr><td><div class="symbol">${s.symbol}</div><div class="sub">${s.name}</div></td>
- <td>${money(s.price)}</td><td class="${s.change>=0?"green":"red"}">${s.change>=0?"+":""}${s.change.toFixed(2)}%</td>
- <td><button class="buy" onclick="trade('${s.symbol}','BUY')">Buy</button>
- <button class="sell" onclick="trade('${s.symbol}','SELL')">Sell</button></td></tr>`).join("")||'<tr><td colspan="4" class="empty">No matching stocks found.</td></tr>';
-}
-function trade(symbol,side){
- const s=stocks.find(x=>x.symbol===symbol);
- const raw=prompt(`${side} ${symbol}\nSample price: ${money(s.price)}\nEnter quantity (whole shares):`,"1");
- if(raw===null)return;
- const qty=Number(raw);
- if(!Number.isSafeInteger(qty)||qty<1||qty>100000){alert("Enter a valid whole-share quantity.");return}
- const total=qty*s.price;
- if(side==="BUY"){
-  if(total>cash){alert("Insufficient virtual cash.");return}
-  cash-=total;
-  holdings[symbol]=(holdings[symbol]||0)+qty;
- }else{
-  if((holdings[symbol]||0)<qty){alert("You do not own enough shares in this demo portfolio.");return}
-  holdings[symbol]-=qty;
-  cash+=total;
- }
- orders.unshift({symbol,side,qty,price:s.price});
+const $=id=>document.getElementById(id);
+const money=n=>"₹"+Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const safeNum=n=>Number.isFinite(Number(n))?Number(n):0;
+let instruments=fallback.map(normalizeInstrument), visibleInstruments=[], selectedInstrument=instruments[0], segment="equity", apiMode="demo", searchTimer, toastTimer, side="BUY";
+let state=loadState();
+function normalizeInstrument(i){return {...i,symbol:i.tradingsymbol||i.symbol||"",price:safeNum(i.last_price??i.price),exchange:i.exchange||"NSE",name:i.name||i.tradingsymbol||i.symbol||"Unknown",demo:i.demo!==false};}
+function loadState(){try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");return {cash:Number.isFinite(s.cash)?s.cash:STARTING_CASH,holdings:s.holdings&&typeof s.holdings==="object"?s.holdings:{},orders:Array.isArray(s.orders)?s.orders:[]};}catch(_){return {cash:STARTING_CASH,holdings:{},orders:[]};}}
+function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(_){}}
+function showToast(message,error){const el=$("toast");el.textContent=message;el.className="toast show"+(error?" error":"");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className="toast",3600);}
+async function api(url,options){const r=await fetch(url,{...options,headers:{"Content-Type":"application/json",...(options&&options.headers||{})}});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.error||"API request failed");return data;}
+async function init(){
+ try{
+  const health=await api("/api/health");
+  apiMode=health.mode==="provider-configured"?"provider":"demo";
+  $("connectionText").textContent=apiMode==="provider"?"Provider connected":"Demo market data";
+  $("modeChip").textContent=apiMode==="provider"?"PAPER TRADING · MARKET DATA":"PAPER TRADING";
+  $("marketMode").textContent=apiMode==="provider"?"Provider configured":"Demo mode";
+  $("marketModePill").textContent=apiMode==="provider"?"MARKET DATA":"SIMULATED";
+  $("marketModePill").className="pill "+(apiMode==="provider"?"pill-green":"pill-amber");
+  $("marketAsOf").textContent=apiMode==="provider"?"Quotes via API":"Not a live feed";
+ }catch(_){apiMode="demo";}
+ await loadInstruments("",segment);
  renderAll();
- alert(`${side} demo order recorded for ${qty} share(s) of ${symbol}. No real trade was placed.`);
+ loadOptions();
 }
-function renderHoldings(){
- const entries=Object.entries(holdings).filter(([s,q])=>q>0);
- document.getElementById("holdings").innerHTML=entries.length?entries.map(([symbol,qty])=>{
- const s=stocks.find(x=>x.symbol===symbol);
- return `<div class="holding"><div><strong>${symbol}</strong><div class="sub">${qty} shares</div></div><strong>${money(qty*s.price)}</strong></div>`;
- }).join(""):'<div class="empty">No holdings yet.<br>Buy a demo stock to get started.</div>';
+async function loadInstruments(query,seg){
+ const list=$("watchList");
+ if(!query)list.innerHTML='<div class="watch-empty">Loading instruments…</div>';
+ try{
+  const data=await api("/api/instruments?segment="+encodeURIComponent(seg||"equity")+"&limit=100&offset=0"+(query?"&q="+encodeURIComponent(query):""));
+  apiMode=data.mode==="provider"?"provider":apiMode;
+  if(data.instruments&&data.instruments.length){visibleInstruments=data.instruments.map(normalizeInstrument);if(!query)instruments=visibleInstruments.concat(instruments.filter(old=>!visibleInstruments.some(x=>x.exchange===old.exchange&&x.symbol===old.symbol)));if(visibleInstruments.length)selectedInstrument=visibleInstruments[0];}
+  else visibleInstruments=[];
+ }catch(_){
+  const q=(query||"").toLowerCase();
+  visibleInstruments=instruments.filter(i=>(seg==="indices"?(i.instrument_type==="INDEX"):seg==="options"?false:(i.instrument_type!=="INDEX"))&&(!q||(i.symbol+" "+i.name).toLowerCase().includes(q)));
+ }
+ renderWatchlist();
+ if(apiMode==="provider")await refreshQuotes();
+}
+function fmtPrice(n){return n>0?money(n):"—";}
+function renderWatchlist(){
+ $("watchCount").textContent=visibleInstruments.length+" shown";
+ $("watchMode").textContent=apiMode==="provider"?"Instrument master":"Demo universe";
+ if(!visibleInstruments.length){$("watchList").innerHTML='<div class="watch-empty">No matches. Try another symbol.</div>';return;}
+ $("watchList").innerHTML=visibleInstruments.slice(0,100).map(i=>{
+  const change=i.change===undefined||i.change===null?null:Number(i.change),selected=selectedInstrument&&selectedInstrument.symbol===i.symbol&&selectedInstrument.exchange===i.exchange;
+  return '<div class="watch-row '+(selected?"selected":"")+'" data-symbol="'+escapeHtml(i.symbol)+'" data-exchange="'+escapeHtml(i.exchange)+'"><div><div class="stock-name">'+escapeHtml(i.symbol)+'</div><div class="stock-exchange">'+escapeHtml(i.exchange)+' · '+escapeHtml(i.name)+'</div></div><div><div class="stock-price">'+fmtPrice(i.price)+'</div><div class="stock-change '+(change===null?"":change>=0?"pos":"neg")+'">'+(change===null?"—":(change>=0?"+":"")+change.toFixed(2)+"%")+'</div></div></div>";
+ }).join("");
+}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function refreshQuotes(){
+ const batch=visibleInstruments.slice(0,100).filter(i=>i.symbol&&i.exchange).map(i=>i.exchange+":"+i.symbol);
+ if(!batch.length)return;
+ try{const data=await api("/api/quotes?symbols="+encodeURIComponent(batch.join(",")));if(data.mode==="provider")apiMode="provider";Object.entries(data.quotes||{}).forEach(([key,q])=>{const parts=key.split(":");const i=instruments.find(x=>x.exchange===parts[0]&&x.symbol===parts.slice(1).join(":"))||visibleInstruments.find(x=>x.exchange===parts[0]&&x.symbol===parts.slice(1).join(":"));if(i&&Number(q.last_price)>0)i.price=Number(q.last_price);});renderWatchlist();renderAll();}
+ catch(_){/* keep last known data */}
+}
+function holdingRows(){return Object.entries(state.holdings).filter(([,h])=>h&&h.qty>0).map(([key,h])=>{const i=findInstrument(key,h);const ltp=i?i.price:safeNum(h.avgPrice);return {key,h,i,ltp,value:ltp*h.qty,pnl:(ltp-safeNum(h.avgPrice))*h.qty};});}
+function findInstrument(key,h){return instruments.concat(visibleInstruments).find(i=>i.exchange+":"+i.symbol===key)||{exchange:h.exchange||"NSE",symbol:h.symbol||key.split(":").slice(1).join(":"),name:h.name||key,price:safeNum(h.avgPrice),demo:true};}
+function stats(){
+ const rows=holdingRows(),invested=rows.reduce((a,r)=>a+r.value,0),cost=rows.reduce((a,r)=>a+safeNum(r.h.avgPrice)*r.h.qty,0),pnl=invested-cost;
+ return {rows,invested,cost,pnl,total:state.cash+invested,used:Math.min(100,Math.max(0,(invested/STARTING_CASH)*100))};
+}
+function renderStats(){
+ const s=stats();$("portfolioValue").textContent=money(s.total);$("cashValue").textContent=money(state.cash);$("investedValue").textContent=money(s.invested);$("pnlValue").textContent=money(s.pnl);$("pnlValue").className="stat-number "+(s.pnl>=0?"pos":"neg");$("pnlNote").textContent=s.pnl>=0?"Unrealized demo gain":"Unrealized demo loss";$("capitalUsed").textContent=s.used.toFixed(1)+"%";$("capitalProgress").style.width=s.used+"%";
+}
+function renderPositions(){
+ const rows=holdingRows();
+ const row=r=>'<tr><td><div class="td-strong">'+escapeHtml(r.h.symbol||r.key.split(":").pop())+'</div><div class="td-muted">'+escapeHtml(r.h.name||"")+'</div></td><td>'+escapeHtml(r.h.product||"CNC")+'</td><td>'+r.h.qty+'</td><td>'+money(r.h.avgPrice)+'</td><td>'+fmtPrice(r.ltp)+'</td><td class="'+(r.pnl>=0?"pos":"neg")+'">'+money(r.pnl)+'</td><td><button class="btn btn-sell btn-sm" data-sell="'+escapeHtml(r.key)+'">Sell</button></td></tr>';
+ $("dashPositions").innerHTML=rows.length?rows.slice(0,5).map(row).join(""):'<tr><td class="empty-cell" colspan="7">No open positions yet. Place a demo order to get started.</td></tr>';
+ $("positionsTable").innerHTML=rows.length?rows.map(row).join(""):'<tr><td class="empty-cell" colspan="7">No open positions. Your simulated trades will appear here.</td></tr>';
+ $("holdingsTable").innerHTML=rows.length?rows.map(r=>'<tr><td><div class="td-strong">'+escapeHtml(r.h.symbol||r.key.split(":").pop())+'</div><div class="td-muted">'+escapeHtml(r.h.name||"")+'</div></td><td>'+r.h.qty+'</td><td>'+money(r.h.avgPrice)+'</td><td>'+fmtPrice(r.ltp)+'</td><td>'+money(r.value)+'</td><td class="'+(r.pnl>=0?"pos":"neg")+'">'+money(r.pnl)+'</td><td><button class="btn btn-sell btn-sm" data-sell="'+escapeHtml(r.key)+'">Sell</button></td></tr>').join(""):'<tr><td class="empty-cell" colspan="7">No holdings yet. Buy a demo instrument to see it here.</td></tr>';
 }
 function renderOrders(){
- document.getElementById("ordersList").innerHTML=orders.length?orders.slice(0,10).map(o=>`
- <tr><td>${o.symbol}</td><td class="${o.side==="BUY"?"green":"red"}">${o.side}</td><td>${o.qty}</td><td>${money(o.price)}</td><td>Demo filled</td></tr>`).join(""):'<tr><td colspan="5" class="empty">No demo orders yet. Try buying a stock.</td></tr>';
+ const rows=state.orders;
+ const row=o=>'<tr><td><span class="td-strong">'+escapeHtml(o.id)+'</span></td><td><div class="td-strong">'+escapeHtml(o.symbol)+'</div><div class="td-muted">'+escapeHtml(o.exchange||"NSE")+'</div></td><td class="'+(o.side==="BUY"?"pos":"neg")+'">'+o.side+'</td><td>'+o.quantity+'</td><td>'+escapeHtml(o.orderType||"MARKET")+'</td><td>'+money(o.fillPrice||o.price||0)+'</td><td><span class="pill pill-amber">SIMULATED</span></td><td>'+new Date(o.createdAt||Date.now()).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})+'</td></tr>';
+ $("ordersTable").innerHTML=rows.length?rows.map(row).join(""):'<tr><td class="empty-cell" colspan="8">No orders yet. Use New order to place a simulated trade.</td></tr>';
+ $("recentOrders").innerHTML=rows.length?rows.slice(0,4).map(o=>'<div class="holding" style="display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #edf0f4;padding:10px 0"><div><div class="td-strong">'+escapeHtml(o.symbol)+' <span class="'+(o.side==="BUY"?"pos":"neg")+'">'+o.side+'</span></div><div class="td-muted">'+o.quantity+' shares · '+escapeHtml(o.orderType||"MARKET")+'</div></div><div style="text-align:right"><strong>'+money(o.fillPrice||o.price||0)+'</strong><div class="td-muted">Demo filled</div></div></div>').join(""):'<div class="watch-empty">No orders placed yet.</div>';
 }
-function renderAll(){
- renderStocks();renderHoldings();renderOrders();
- document.getElementById("cash").textContent=money(cash);
- const value=cash+Object.entries(holdings).reduce((sum,[sym,qty])=>sum+qty*stocks.find(s=>s.symbol===sym).price,0);
- document.getElementById("portfolioValue").textContent=money(value);
+function renderMovers(){
+ const sorted=visibleInstruments.filter(i=>i.instrument_type!=="INDEX").slice(0,12);
+ $("movers").innerHTML=sorted.length?sorted.slice(0,4).map(i=>{const change=i.change===undefined||i.change===null?null:Number(i.change);return '<div class="mover"><div class="mover-top"><span class="mover-symbol">'+escapeHtml(i.symbol)+'</span><span class="'+(change===null?"":change>=0?"pos":"neg")+'" style="font-size:10px;font-weight:800">'+(change===null?"—":(change>=0?"+":"")+change.toFixed(2)+"%")+'</span></div><div class="mover-price">'+fmtPrice(i.price)+'</div><div class="mover-change" style="color:var(--muted)">'+(change===null?"Change data unavailable":"Market change")+'</div></div>';}).join(""):'<div class="watch-empty">Search or load instruments to view movers.</div>';
 }
-function showSection(id){document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
-renderAll();
+function renderAll(){renderStats();renderPositions();renderOrders();renderMovers();}
+function setView(view){
+ document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active",el.id==="view-"+view));
+ document.querySelectorAll("[data-view]").forEach(el=>el.classList.toggle("active",el.dataset.view===view));
+ const titles={dashboard:["Good trading starts with a plan.","Your market overview, portfolio and orders in one workspace."],holdings:["Holdings","Track the value of your simulated investments."],positions:["Positions","Review and manage your open paper-trading positions."],orders:["Orders","Review the history of your simulated trades."],options:["Options chain","Explore call and put instruments in a paper-trading workspace."]};
+ $("pageTitle").textContent=titles[view][0];$("pageSubtitle").textContent=titles[view][1];
+ if(view==="options")loadOptions();
+}
+function openOrder(inst,orderSide){
+ const i=inst||selectedInstrument||instruments[0];if(!i){showToast("Load an instrument first.",true);return;}
+ selectedInstrument=i;side=orderSide||"BUY";
+ $("orderSymbol").value=i.symbol;$("orderExchange").value=["NSE","BSE","NFO","MCX"].includes(i.exchange)?i.exchange:"NSE";$("orderQty").value=i.lot_size&&i.lot_size>1?i.lot_size:1;$("orderProduct").value=i.exchange==="NFO"?"NRML":"CNC";$("orderType").value="MARKET";$("orderPrice").value="";$("orderPrice").disabled=true;
+ $("sideBuy").className=side==="BUY"?"active buy-active":"";$("sideSell").className=side==="SELL"?"active sell-active":"";
+ $("summarySide").textContent=side;$("submitOrder").textContent="Place demo "+side.toLowerCase();$("submitOrder").className="btn "+(side==="BUY"?"btn-primary":"btn-sell");$("orderTitle").textContent=side==="BUY"?"Buy "+i.symbol:"Sell "+i.symbol;$("orderSubtitle").textContent=(i.exchange||"NSE")+" · "+(i.demo===false?"Provider instrument":"Demo instrument")+" · simulated only";
+ updateEstimate();$("orderOverlay").classList.add("open");setTimeout(()=>$("orderQty").focus(),50);
+}
+function closeOrder(){$("orderOverlay").classList.remove("open");}
+function updateEstimate(){const qty=Math.max(0,safeNum($("orderQty").value));const price=$("orderType").value==="MARKET"?(selectedInstrument?selectedInstrument.price:0):safeNum($("orderPrice").value);$("estimatedValue").textContent=money(qty*price);$("summarySide").textContent=side;$("submitOrder").textContent="Place demo "+side.toLowerCase();$("submitOrder").className="btn "+(side==="BUY"?"btn-primary":"btn-sell");}
+async function submitOrder(event){
+ event.preventDefault();
+ const symbol=$("orderSymbol").value.trim().toUpperCase(),exchange=$("orderExchange").value,quantity=Number($("orderQty").value),product=$("orderProduct").value,orderType=$("orderType").value,price=safeNum($("orderPrice").value);
+ if(!symbol||!Number.isSafeInteger(quantity)||quantity<1){showToast("Enter a valid symbol and whole-number quantity.",true);return;}
+ if(orderType!=="MARKET"&&price<=0){showToast("Enter a positive order price.",true);return;}
+ const instrument=instruments.concat(visibleInstruments).find(i=>i.symbol===symbol&&i.exchange===exchange);
+ const ltp=instrument?instrument.price:(selectedInstrument&&selectedInstrument.symbol===symbol?safeNum(selectedInstrument.price):0);
+ const fillPrice=orderType==="MARKET"?ltp:price;
+ if(fillPrice<=0){showToast("No demo price is available for this instrument.",true);return;}
+ const key=exchange+":"+symbol,existing=state.holdings[key],gross=fillPrice*quantity;
+ if(side==="BUY"&&gross>state.cash){showToast("Insufficient virtual cash for this order.",true);return;}
+ if(side==="SELL"&&(!existing||existing.qty<quantity)){showToast("You do not have enough of this instrument in your demo holdings.",true);return;}
+ $("submitOrder").disabled=true;
+ try{
+  const result=await api("/api/orders",{method:"POST",body:JSON.stringify({mode:"demo",symbol,exchange,side,quantity,product,orderType,price:orderType==="MARKET"?undefined:price})});
+  if(side==="BUY"){
+   const oldQty=existing?existing.qty:0,oldAvg=existing?safeNum(existing.avgPrice):0;
+   state.holdings[key]={symbol,exchange,name:instrument?instrument.name:symbol,qty:oldQty+quantity,avgPrice:((oldQty*oldAvg)+(quantity*fillPrice))/(oldQty+quantity),product};
+   state.cash-=gross;
+  }else{
+   existing.qty-=quantity;state.cash+=gross;if(existing.qty<=0)delete state.holdings[key];
+  }
+  state.orders.unshift({...result.order,fillPrice,createdAt:result.order.createdAt||new Date().toISOString()});state.orders=state.orders.slice(0,200);saveState();closeOrder();renderAll();showToast(result.message||"Simulated order recorded.");
+ }catch(error){showToast(error.message||"Could not record demo order.",true);}
+ finally{$("submitOrder").disabled=false;}
+}
+function makeMockOptions(root){
+ const base=root==="BANKNIFTY"?54500:root==="FINNIFTY"?26500:25100;
+ return Array.from({length:11},(_,idx)=>{const strike=base+(idx-5)*(root==="NIFTY"?50:100);const dist=Math.abs(idx-5);return {strike,ce:{symbol:root+"-DEMO-"+strike+"CE",price:Math.max(5,220-dist*32),lot_size:1,exchange:"NFO",demo:true},pe:{symbol:root+"-DEMO-"+strike+"PE",price:Math.max(5,215-dist*31),lot_size:1,exchange:"NFO",demo:true}};});
+}
+async function loadOptions(){
+ const root=$("optionRoot").value||"NIFTY";$("optionsTable").innerHTML='<tr><td class="empty-cell" colspan="7">Loading option instruments…</td></tr>';
+ try{
+  const data=await api("/api/options?root="+encodeURIComponent(root)+($("optionExpiry").value?"&expiry="+encodeURIComponent($("optionExpiry").value):""));
+  const options=data.options||[],expirySelect=$("optionExpiry"),current=expirySelect.value;
+  const expiries=data.expiries||[];
+  if(expiries.length){expirySelect.innerHTML='<option value="">Nearest available</option>'+expiries.map(e=>'<option value="'+escapeHtml(e)+'">'+escapeHtml(e)+'</option>').join("");if(current&&expiries.includes(current))expirySelect.value=current;}
+  const groups={};
+  options.forEach(o=>{const strike=safeNum(o.strike);if(!strike)return;groups[strike]=groups[strike]||{strike};const type=o.instrument_type==="CE"?"ce":"pe";groups[strike][type]={symbol:o.tradingsymbol,price:safeNum(o.last_price),lot_size:safeNum(o.lot_size)||1,exchange:o.exchange||"NFO",name:o.name||o.tradingsymbol,demo:o.demo!==false};});
+  let rows=Object.values(groups).sort((a,b)=>a.strike-b.strike);
+  if(!rows.length){rows=makeMockOptions(root);$("optionsMode").textContent="SIMULATED";$("optionsMode").className="pill pill-amber";$("optionsNote").textContent="No provider option instruments are available. Generated strikes and premiums are illustrative only; each demo option order uses a lot size of 1.";}
+  else{$("optionsMode").textContent=data.mode==="provider"?"PROVIDER INSTRUMENTS":"DEMO";$("optionsMode").className="pill "+(data.mode==="provider"?"pill-green":"pill-amber");$("optionsNote").textContent=data.mode==="provider"?"Listed instruments loaded from the configured provider master. Prices from the master may not be live; connect a quote feed for current premiums.":"Option data is illustrative only.";}
+  $("optionsTable").innerHTML=rows.map(r=>'<tr><td><button class="btn btn-buy btn-sm" data-option="'+escapeHtml(r.ce&&r.ce.symbol||"")+'" data-side="BUY" data-price="'+safeNum(r.ce&&r.ce.price)+'" data-lot="'+safeNum(r.ce&&r.ce.lot_size||1)+'">Buy CE</button></td><td><button class="btn btn-sell btn-sm" data-option="'+escapeHtml(r.ce&&r.ce.symbol||"")+'" data-side="SELL" data-price="'+safeNum(r.ce&&r.ce.price)+'" data-lot="'+safeNum(r.ce&&r.ce.lot_size||1)+'">Sell</button></td><td class="call-cell">'+fmtPrice(r.ce&&r.ce.price)+'</td><td><div class="td-strong">'+escapeHtml(r.ce&&r.ce.symbol||"—")+'</div></td><td class="strike-cell">'+Number(r.strike).toLocaleString("en-IN")+'</td><td><div class="td-strong">'+escapeHtml(r.pe&&r.pe.symbol||"—")+'</div></td><td class="put-cell">'+fmtPrice(r.pe&&r.pe.price)+'</td><td><button class="btn btn-buy btn-sm" data-option="'+escapeHtml(r.pe&&r.pe.symbol||"")+'" data-side="BUY" data-price="'+safeNum(r.pe&&r.pe.price)+'" data-lot="'+safeNum(r.pe&&r.pe.lot_size||1)+'">Buy PE</button></td><td><button class="btn btn-sell btn-sm" data-option="'+escapeHtml(r.pe&&r.pe.symbol||"")+'" data-side="SELL" data-price="'+safeNum(r.pe&&r.pe.price)+'" data-lot="'+safeNum(r.pe&&r.pe.lot_size||1)+'">Sell</button></td></tr>').join("");
+ }catch(error){const rows=makeMockOptions(root);$("optionsMode").textContent="SIMULATED";$("optionsMode").className="pill pill-amber";$("optionsTable").innerHTML=rows.map(r=>'<tr><td><button class="btn btn-buy btn-sm" data-option="'+r.ce.symbol+'" data-side="BUY" data-price="'+r.ce.price+'" data-lot="1">Buy CE</button></td><td><button class="btn btn-sell btn-sm" data-option="'+r.ce.symbol+'" data-side="SELL" data-price="'+r.ce.price+'" data-lot="1">Sell</button></td><td class="call-cell">'+money(r.ce.price)+'</td><td>'+r.ce.symbol+'</td><td class="strike-cell">'+r.strike+'</td><td>'+r.pe.symbol+'</td><td class="put-cell">'+money(r.pe.price)+'</td><td><button class="btn btn-buy btn-sm" data-option="'+r.pe.symbol+'" data-side="BUY" data-price="'+r.pe.price+'" data-lot="1">Buy PE</button></td><td><button class="btn btn-sell btn-sm" data-option="'+r.pe.symbol+'" data-side="SELL" data-price="'+r.pe.price+'" data-lot="1">Sell</button></td></tr>').join("");$("optionsNote").textContent="Using generated sample options because the provider instrument API could not be reached. "+error.message;}
+}
+function handleOptionClick(btn){const symbol=btn.dataset.option;if(!symbol)return;const price=safeNum(btn.dataset.price),lot=Math.max(1,safeNum(btn.dataset.lot)||1);const isProvider=!symbol.includes("-DEMO-");const inst={exchange:"NFO",symbol,name:symbol,price,lot_size:lot,demo:!isProvider};const existing=instruments.find(i=>i.exchange==="NFO"&&i.symbol===symbol);if(existing)Object.assign(inst,existing);selectedInstrument=inst;openOrder(inst,btn.dataset.side||"BUY");$("orderQty").value=lot;updateEstimate();}
+function bindEvents(){
+ $("stockSearch").addEventListener("input",e=>{clearTimeout(searchTimer);const q=e.target.value.trim();searchTimer=setTimeout(()=>loadInstruments(q,segment),250);});
+ document.querySelectorAll("[data-segment]").forEach(b=>b.addEventListener("click",()=>{segment=b.dataset.segment;document.querySelectorAll("[data-segment]").forEach(x=>x.classList.toggle("active",x===b));if(segment==="options"){setView("options");return;}loadInstruments($("stockSearch").value.trim(),segment);}));
+ $("watchList").addEventListener("click",e=>{const row=e.target.closest(".watch-row");if(!row)return;selectedInstrument=visibleInstruments.find(i=>i.symbol===row.dataset.symbol&&i.exchange===row.dataset.exchange)||selectedInstrument;renderWatchlist();openOrder(selectedInstrument,"BUY");});
+ document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
+ $("refreshBtn").addEventListener("click",async()=>{await loadInstruments($("stockSearch").value.trim(),segment);await refreshQuotes();showToast("Market workspace refreshed.");});
+ $("quickBuy").addEventListener("click",()=>openOrder(selectedInstrument,"BUY"));$("newOrderFromOrders").addEventListener("click",()=>openOrder(selectedInstrument,"BUY"));
+ $("closeOrder").addEventListener("click",closeOrder);$("cancelOrder").addEventListener("click",closeOrder);$("orderOverlay").addEventListener("click",e=>{if(e.target===$("orderOverlay"))closeOrder();});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeOrder();if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("stockSearch").focus();}});
+ $("sideBuy").addEventListener("click",()=>{side="BUY";$("sideBuy").className="active buy-active";$("sideSell").className="";updateEstimate();});
+ $("sideSell").addEventListener("click",()=>{side="SELL";$("sideBuy").className="";$("sideSell").className="active sell-active";updateEstimate();});
+ $("orderType").addEventListener("change",()=>{$("orderPrice").disabled=$("orderType").value==="MARKET";if($("orderType").value==="MARKET")$("orderPrice").value="";updateEstimate();});
+ ["orderQty","orderPrice","orderSymbol","orderExchange"].forEach(id=>$(id).addEventListener("input",updateEstimate));
+ $("orderForm").addEventListener("submit",submitOrder);
+ document.body.addEventListener("click",e=>{const sell=e.target.closest("[data-sell]");if(sell){const key=sell.dataset.sell,h=state.holdings[key];if(h){const inst=findInstrument(key,h);openOrder({...inst,price:inst.price||h.avgPrice},"SELL");$("orderSymbol").value=h.symbol||inst.symbol;$("orderExchange").value=h.exchange||inst.exchange;}return;}const option=e.target.closest("[data-option]");if(option)handleOptionClick(option);});
+ $("optionRoot").addEventListener("change",()=>{$("optionExpiry").value="";loadOptions();});$("optionExpiry").addEventListener("change",loadOptions);$("loadOptions").addEventListener("click",loadOptions);
+ $("resetDemo").addEventListener("click",()=>{if(confirm("Reset this browser's virtual cash, holdings and order history? This cannot be undone.")){state={cash:STARTING_CASH,holdings:{},orders:[]};saveState();renderAll();showToast("Demo account reset.");}});
+ document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-range]").forEach(x=>x.classList.toggle("active",x===b));$("chartSubtitle").textContent="NIFTY 50 · illustrative "+b.dataset.range+" trend";const paths={"1D":"M0 145 L45 130 L85 139 L125 100 L165 112 L205 85 L245 103 L285 62 L325 76 L365 50 L405 68 L445 37 L485 54 L525 30 L565 47 L605 25 L650 36 L700 18","1W":"M0 125 L45 145 L85 115 L125 130 L165 95 L205 112 L245 88 L285 100 L325 65 L365 82 L405 55 L445 66 L485 43 L525 60 L565 32 L605 40 L650 20 L700 28","1M":"M0 160 L45 145 L85 155 L125 120 L165 130 L205 110 L245 125 L285 95 L325 105 L365 75 L405 90 L445 58 L485 68 L525 40 L565 52 L605 33 L650 42 L700 18","1Y":"M0 170 L45 155 L85 160 L125 140 L165 145 L205 115 L245 125 L285 98 L325 112 L365 82 L405 92 L445 70 L485 80 L525 45 L565 60 L605 32 L650 40 L700 18"};const d=paths[b.dataset.range];$("chartLine").setAttribute("d",d);$("chartArea").setAttribute("d",d+" L700 190 L0 190Z");}));
+}
+bindEvents();init();
+})();
 </script>
 </body>
 </html>
