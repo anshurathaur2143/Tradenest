@@ -1,0 +1,10 @@
+{
+  "name": "tradenest",
+  "version": "2.0.0",
+  "private": true,
+  "description": "TradeNest trading dashboard prototype with Vercel serverless APIs",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node -e \"console.log('TradeNest API routes run on Vercel; use vercel dev locally.')\""
+  }
+}
