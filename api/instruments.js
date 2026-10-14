@@ -1,4 +1,4 @@
-const { getInstrumentMaster, hasKiteCredentials, json } = require("./_lib/market");
+const { getInstrumentMaster, hasKiteCredentials, json } = require("../lib/market");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") return json(res, 405, { error:"Method not allowed" });
