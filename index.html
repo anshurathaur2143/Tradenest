@@ -235,7 +235,7 @@ async function loadInstruments(query,seg){
   visibleInstruments=instruments.filter(i=>(seg==="indices"?(i.instrument_type==="INDEX"):seg==="options"?false:(i.instrument_type!=="INDEX"))&&(!q||(i.symbol+" "+i.name).toLowerCase().includes(q)));
  }
  renderWatchlist();
- if(apiMode==="provider")refreshQuotes();
+ if(apiMode==="provider")await refreshQuotes();
 }
 function fmtPrice(n){return n>0?money(n):"—";}
 function renderWatchlist(){
@@ -278,7 +278,7 @@ function renderOrders(){
 }
 function renderMovers(){
  const sorted=visibleInstruments.filter(i=>i.instrument_type!=="INDEX").slice(0,12);
- $("movers").innerHTML=sorted.length?sorted.slice(0,4).map((i,idx)=>{const change=Number(i.change??[1.24,-.52,.84,1.65][idx%4]);return '<div class="mover"><div class="mover-top"><span class="mover-symbol">'+escapeHtml(i.symbol)+'</span><span class="'+(change>=0?"pos":"neg")+'" style="font-size:10px;font-weight:800">'+(change>=0?"+":"")+change.toFixed(2)+'%</span></div><div class="mover-price">'+fmtPrice(i.price)+'</div><div class="mover-change" style="color:var(--muted)">Sample market snapshot</div></div>';}).join(""):'<div class="watch-empty">Search or load instruments to view movers.</div>';
+ $("movers").innerHTML=sorted.length?sorted.slice(0,4).map(i=>{const change=i.change===undefined||i.change===null?null:Number(i.change);return '<div class="mover"><div class="mover-top"><span class="mover-symbol">'+escapeHtml(i.symbol)+'</span><span class="'+(change===null?"":change>=0?"pos":"neg")+'" style="font-size:10px;font-weight:800">'+(change===null?"—":(change>=0?"+":"")+change.toFixed(2)+"%")+'</span></div><div class="mover-price">'+fmtPrice(i.price)+'</div><div class="mover-change" style="color:var(--muted)">'+(change===null?"Change data unavailable":"Market change")+'</div></div>';}).join(""):'<div class="watch-empty">Search or load instruments to view movers.</div>';
 }
 function renderAll(){renderStats();renderPositions();renderOrders();renderMovers();}
 function setView(view){
