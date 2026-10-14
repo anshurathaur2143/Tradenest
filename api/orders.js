@@ -1,4 +1,4 @@
-const { json } = require("./_lib/market");
+const { json } = require("../lib/market");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
